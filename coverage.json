@@ -1,42 +1,46 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-26T02:46:38.859Z",
+  "generatedAt": "2026-02-26T02:56:20.235Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-15",
-        "summary": "Redesign the LoginScreen (frontend/src/pages/LoginScreen.tsx) to make Internet Identity authentication feel natively built-in rather than redirecting to an external page. The login/signup experience should be presented as a seamless, in-app onboarding flow: show animated VibeStream branding, a brief feature carousel or highlights, and a prominent 'Get Started' / 'Sign In' call-to-action button that triggers Internet Identity inline. After authentication, if the user has no profile, transition directly into the ProfileSetupModal inline (no page redirect) with a multi-step wizard feel (Step 1: username, Step 2: bio, Step 3: optional avatar). Use the existing useInternetIdentity hook and App.tsx routing logic — do not change auth logic, only the visual presentation and flow polish.",
+        "id": "REQ-16",
+        "summary": "Fix the infinite 'Loading your profile' screen in App.tsx that occurs after a user authenticates via Internet Identity. The profile loading state must resolve correctly in all cases: (1) when the user has an existing profile — proceed to the main app, (2) when the user has no profile — show the ProfileSetupModal, (3) when the backend query errors or returns null/empty — do not remain stuck; show an appropriate fallback or retry option. Ensure the React Query profile fetch (getMyProfile or equivalent) uses the authenticated actor, handles loading/error/success states exhaustively, and does not stall indefinitely due to a missing actor, unauthenticated call, or unhandled promise rejection.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/LoginScreen.tsx",
-          "frontend/src/components/ProfileSetupModal.tsx",
           "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/LoginScreen.tsx",
-          "frontend/src/components/ProfileSetupModal.tsx",
           "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-17",
+        "summary": "Audit the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing. If the actor is not yet initialized (e.g., still null or anonymous), the query should be disabled (enabled: false) rather than executing and returning an empty/error result that causes the loading state to hang. Re-enable and refetch automatically once the authenticated actor is ready.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts"
         ]
       }
     ]
   },
   "changedFiles": [
     "build-request.json",
-    "build-template/README.md",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/App.tsx",
-    "frontend/src/components/ProfileSetupModal.tsx",
-    "frontend/src/pages/LoginScreen.tsx",
+    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

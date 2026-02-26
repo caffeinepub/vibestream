@@ -17,14 +17,25 @@ export function useGetCallerUserProfile() {
       if (!actor) throw new Error('Actor not available');
       return actor.getCallerUserProfile();
     },
+    // Only fire when we have an authenticated actor (not anonymous) and identity is set
     enabled: !!actor && !actorFetching && !!identity,
     retry: false,
+    // Don't refetch in background to avoid flickering
+    refetchOnWindowFocus: false,
   });
+
+  // isLoading: true only when we don't have data yet and are waiting
+  // Don't include actorFetching here if we already have query data
+  const isLoading = (actorFetching && !query.data && !query.isFetched) || (query.isLoading && !query.isFetched);
+
+  // isFetched: true once the query has completed at least once with the current identity
+  // Don't gate on actorFetching to avoid false negatives after background refetches
+  const isFetched = !!identity && query.isFetched;
 
   return {
     ...query,
-    isLoading: actorFetching || query.isLoading,
-    isFetched: !!actor && !actorFetching && query.isFetched,
+    isLoading,
+    isFetched,
   };
 }
 

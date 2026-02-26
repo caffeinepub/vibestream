@@ -1,16 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Redesign the VibeStream login/signup screen to feel natively built-in, with a polished onboarding flow and inline profile setup wizard.
+**Goal:** Fix the infinite "Loading your profile" screen that appears after a user authenticates via Internet Identity in the VibeStream app.
 
 **Planned changes:**
-- Redesign `LoginScreen.tsx` to show animated VibeStream branding, a brief feature highlights section, and a prominent "Get Started / Sign In" button
-- The "Sign In" button triggers Internet Identity using the existing `useInternetIdentity` hook, with a loading/spinning state during authentication
-- After first login, display the profile setup inline (no page redirect) as a multi-step wizard: Step 1 username, Step 2 bio, Step 3 optional avatar — with a step progress indicator
-- On subsequent logins, skip setup and go directly to the home feed
-- Apply the existing dark theme (`#121212` background, `#8A2BE2` primary, `#00FFFF` accent, glassmorphism card styling)
-- Ensure mobile-first layout fully usable at 375px viewport width
-- Reuse existing UI components from `frontend/src/components/ui` where applicable
-- No changes to `useInternetIdentity.ts`, `useActor.ts`, `main.tsx`, or any backend code
+- Update `App.tsx` to exhaustively handle all profile loading states (loading, success, error) so the app never gets stuck in an infinite spinner
+- Ensure that if the user has an existing profile, they are navigated to the main feed; if no profile exists, the `ProfileSetupModal` is shown; if an error occurs, a fallback/retry option is displayed
+- Audit `useQueries.ts` (or equivalent profile fetch hooks) to set `enabled: false` when the authenticated actor is null or anonymous, preventing premature/empty queries
+- Automatically re-enable and refetch the profile query once the authenticated actor becomes available
 
-**User-visible outcome:** Users see a sleek, branded onboarding screen with smooth inline authentication and a step-by-step profile setup — the entire flow feels native to the app with no external redirects.
+**User-visible outcome:** After logging in with Internet Identity, users no longer see an infinite "Loading your profile" spinner — they are either taken to the main app, shown the profile setup flow, or presented with an error/retry option.

@@ -1,36 +1,40 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Revamp Login/Signup UI to feel built-in and native",
+  "title": "Fix 'Loading your profile' infinite loading state after login",
   "requirements": [
     {
-      "id": "REQ-15",
-      "summary": "Redesign LoginScreen with seamless in-app Internet Identity authentication flow, animated branding, feature carousel, inline profile setup wizard, and loading states using existing auth hooks",
+      "id": "REQ-16",
+      "summary": "Fix the infinite 'Loading your profile' screen in App.tsx that occurs after a user authenticates via Internet Identity by ensuring the profile loading state resolves correctly in all cases: existing profile, no profile, or error",
       "acceptanceCriteria": [
-        "The login screen displays VibeStream branding and a clear 'Sign In / Get Started' button that initiates Internet Identity without navigating away from the app.",
-        "The Internet Identity prompt feels embedded — the transition to the II dialog and back is smooth with loading indicators.",
-        "On first login, the profile setup steps appear inline within the same screen/modal flow (not as a separate page jump), with a step indicator showing progress.",
-        "On subsequent logins, the user lands directly on the home feed without any setup interruption.",
-        "The entire flow uses the existing VibeStream dark theme: #121212 background, #8A2BE2 primary, #00FFFF accent, glassmorphism card styling.",
-        "The 'Sign In' button has a loading/spinning state while Internet Identity is processing.",
-        "Mobile-first layout — the onboarding screens are fully usable on a 375px wide viewport.",
-        "No changes are made to useInternetIdentity.ts, useActor.ts, or main.tsx."
+        "After successful Internet Identity login, the 'Loading your profile' spinner resolves within a reasonable time (no infinite spinner).",
+        "If the authenticated user has an existing profile, they are taken directly to the main feed/home screen.",
+        "If the authenticated user has no profile, the ProfileSetupModal (or inline profile setup wizard) is displayed.",
+        "If the profile query fails (network error, actor not ready, backend error), an error state or retry button is shown instead of an infinite loader.",
+        "The profile fetch uses an authenticated actor (not anonymous), so the backend can identify the calling principal.",
+        "No console errors related to unhandled promise rejections or null actor references during the auth → profile load flow."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/LoginScreen.tsx",
-          "operation": "modify",
-          "description": "Transform LoginScreen into a native-feeling onboarding experience with animated VibeStream branding (using frontend/public/assets/generated/vibestream-logo.dim_512x512.png), a feature carousel highlighting VibeStream capabilities (video sharing, trending content, social features), and a prominent glassmorphism 'Get Started' button that triggers the existing login() function from useInternetIdentity. Add loading/spinner states tied to loginStatus === 'logging-in'. Use smooth transitions, the existing dark theme (#121212, #8A2BE2, #00FFFF), and ensure mobile-first layout (375px viewport). Remove any external redirect feel by using inline loading indicators and animations during the Internet Identity flow."
-        },
-        {
-          "path": "frontend/src/components/ProfileSetupModal.tsx",
-          "operation": "modify",
-          "description": "Redesign ProfileSetupModal as a multi-step inline wizard with a step indicator (Step 1: username, Step 2: bio, Step 3: optional avatar). Use glassmorphism card styling consistent with VibeStream dark theme. Ensure smooth transitions between steps with 'Next' and 'Back' navigation. Keep the existing registerUser mutation logic and image upload progress tracking. Make the modal feel like a native onboarding continuation rather than a separate form. Ensure mobile-first layout (375px viewport). Do not change the underlying hook or backend interaction logic."
-        },
-        {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Update the routing and conditional rendering logic to ensure the ProfileSetupModal appears inline within the LoginScreen context (not as a separate page) when isAuthenticated && userProfile === null. Add smooth transitions between login, profile setup, and main feed. Ensure that on subsequent logins (when userProfile exists), the user is immediately routed to MainLayout without showing the setup modal. Preserve existing useInternetIdentity and useActor hook usage. Do not modify authentication logic. Use the existing isFetched check from useGetCallerUserProfile to prevent profile setup modal flash."
+          "description": "Refactor the profile loading logic in App.tsx to properly handle all three states: (1) user has existing profile → show main app, (2) user has no profile → show ProfileSetupModal/wizard, (3) profile query fails or errors → show error state with retry option. Ensure the loading spinner resolves by checking both actorFetching and profileQuery states. Add error boundary handling for failed profile fetches. Remove any conditions that could cause an infinite loading loop when the actor is ready but the profile query returns null or encounters an error. Add a timeout fallback or explicit error display if the profile query stalls. Verify the component follows the authorization component's recommended pattern for preventing profile setup modal flash by properly combining actorFetching, query.isLoading, and query.isFetched states."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Audit and fix the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing, and re-enable automatically once the authenticated actor is ready",
+      "acceptanceCriteria": [
+        "The getMyProfile (or equivalent) React Query hook sets enabled: false when the actor is null or anonymous.",
+        "Once the authenticated actor becomes available, the profile query fires automatically via query invalidation or dependency change.",
+        "No profile query is fired with an anonymous principal that would return an empty result and leave the UI stuck."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Audit and update the useGetCallerUserProfile hook (or equivalent profile fetch hook) to follow the authorization component's recommended pattern. Set enabled: false when the actor is null, undefined, or when actorFetching is true. Add actorFetching to the dependencies so the query only fires after the authenticated actor is fully initialized. Return a custom state object that properly reflects actor dependency by combining actorFetching || query.isLoading for the isLoading field, and checking !!actor && query.isFetched for isFetched. Ensure the queryKey includes actor identity or principal so the query automatically refetches when the authenticated actor changes. Set retry: false to prevent indefinite retries that could mask the underlying issue. Verify the component follows this exact pattern from the authorization component usage instructions to prevent profile setup modal flash and infinite loading states."
         }
       ]
     }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
+  "projectStateVersion": 7,
   "summary": "VibeStream — a mobile-first PWA social media app combining Instagram Reels + YouTube Shorts aesthetics. Dark mode with neon purple (#8A2BE2), deep black (#121212), and cyan blue (#00FFFF) theme. Glassmorphism cards, smooth animations, Gen-Z design. React + TypeScript frontend, Motoko backend on Internet Computer, Internet Identity authentication.",
   "architectural_notes": [
     "React + TypeScript frontend with Motoko backend on Internet Computer",
@@ -9,8 +9,10 @@
     "Glassmorphism cards, rounded UI, smooth animations, Gen-Z aesthetic",
     "Mobile-first PWA optimized for mobile browsers"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "App stuck on 'loading your profile' screen after login/authentication"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-implement-internet-identity-login-logout-flow-on-the-frontend-using-the-existing-useinternetidentity-hook-on-first-login-redirect-users-to-a-profile-setup-screen-where-they-enter-username-bio-and-optionally-a-profile-picture-url-on-subsequent-logins-skip-setup-if-profile-already-exists-show-a-logout-option-in-the-nav-profile-menu",
@@ -81,6 +83,22 @@
       "title": "Redesign the LoginScreen (frontend/src/pages/LoginScreen.tsx) to make Internet Identity authentication feel natively built-in rather than redirecting to an external page. The login/signup experience should be presented as a seamless, in-app onboarding flow: show animated VibeStream branding, a brief feature carousel or highlights, and a prominent 'Get Started' / 'Sign In' call-to-action button that triggers Internet Identity inline. After authentication, if the user has no profile, transition directly into the ProfileSetupModal inline (no page redirect) with a multi-step wizard feel (Step 1: username, Step 2: bio, Step 3: optional avatar). Use the existing useInternetIdentity hook and App.tsx routing logic — do not change auth logic, only the visual presentation and flow polish.",
       "reqIds": [
         "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-infinite-loading-your-profile-screen-in-app-tsx-that-occurs-after-a-user-authenticates-via-internet-identity-the-profile-loading-state-must-resolve-correctly-in-all-cases-1-when-the-user-has-an-existing-profile-proceed-to-the-main-app-2-when-the-user-has-no-profile-show-the-profilesetupmodal-3-when-the-backend-query-errors-or-returns-null-empty-do-not-remain-stuck-show-an-appropriate-fallback-or-retry-option-ensure-the-react-query-profile-fetch-getmyprofile-or-equivalent-uses-the-authenticated-actor-handles-loading-error-success-states-exhaustively-and-does-not-stall-indefinitely-due-to-a-missing-actor-unauthenticated-call-or-unhandled-promise-rejection",
+      "title": "Fix the infinite 'Loading your profile' screen in App.tsx that occurs after a user authenticates via Internet Identity. The profile loading state must resolve correctly in all cases: (1) when the user has an existing profile — proceed to the main app, (2) when the user has no profile — show the ProfileSetupModal, (3) when the backend query errors or returns null/empty — do not remain stuck; show an appropriate fallback or retry option. Ensure the React Query profile fetch (getMyProfile or equivalent) uses the authenticated actor, handles loading/error/success states exhaustively, and does not stall indefinitely due to a missing actor, unauthenticated call, or unhandled promise rejection.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-audit-the-usequeries-ts-hooks-that-fetch-the-current-user-s-profile-to-ensure-they-depend-on-an-authenticated-actor-being-available-before-firing-if-the-actor-is-not-yet-initialized-e-g-still-null-or-anonymous-the-query-should-be-disabled-enabled-false-rather-than-executing-and-returning-an-empty-error-result-that-causes-the-loading-state-to-hang-re-enable-and-refetch-automatically-once-the-authenticated-actor-is-ready",
+      "title": "Audit the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing. If the actor is not yet initialized (e.g., still null or anonymous), the query should be disabled (enabled: false) rather than executing and returning an empty/error result that causes the loading state to hang. Re-enable and refetch automatically once the authenticated actor is ready.",
+      "reqIds": [
+        "REQ-17"
       ],
       "version": 1
     }
