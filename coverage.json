@@ -1,0 +1,45 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-26T02:46:38.859Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 1,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-15",
+        "summary": "Redesign the LoginScreen (frontend/src/pages/LoginScreen.tsx) to make Internet Identity authentication feel natively built-in rather than redirecting to an external page. The login/signup experience should be presented as a seamless, in-app onboarding flow: show animated VibeStream branding, a brief feature carousel or highlights, and a prominent 'Get Started' / 'Sign In' call-to-action button that triggers Internet Identity inline. After authentication, if the user has no profile, transition directly into the ProfileSetupModal inline (no page redirect) with a multi-step wizard feel (Step 1: username, Step 2: bio, Step 3: optional avatar). Use the existing useInternetIdentity hook and App.tsx routing logic — do not change auth logic, only the visual presentation and flow polish.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/LoginScreen.tsx",
+          "frontend/src/components/ProfileSetupModal.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/LoginScreen.tsx",
+          "frontend/src/components/ProfileSetupModal.tsx",
+          "frontend/src/App.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "build-template/README.md",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/ProfileSetupModal.tsx",
+    "frontend/src/pages/LoginScreen.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "kind": "build_request",
+  "title": "Revamp Login/Signup UI to feel built-in and native",
+  "projectName": "VibeStream",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-15",
+      "text": "Redesign the LoginScreen (frontend/src/pages/LoginScreen.tsx) to make Internet Identity authentication feel natively built-in rather than redirecting to an external page. The login/signup experience should be presented as a seamless, in-app onboarding flow: show animated VibeStream branding, a brief feature carousel or highlights, and a prominent 'Get Started' / 'Sign In' call-to-action button that triggers Internet Identity inline. After authentication, if the user has no profile, transition directly into the ProfileSetupModal inline (no page redirect) with a multi-step wizard feel (Step 1: username, Step 2: bio, Step 3: optional avatar). Use the existing useInternetIdentity hook and App.tsx routing logic — do not change auth logic, only the visual presentation and flow polish.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-recent-1"
+        ],
+        "quotes": [
+          "Change login or signup system,make it inbuilded into it"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The login screen displays VibeStream branding and a clear 'Sign In / Get Started' button that initiates Internet Identity without navigating away from the app.",
+        "The Internet Identity prompt feels embedded — the transition to the II dialog and back is smooth with loading indicators.",
+        "On first login, the profile setup steps appear inline within the same screen/modal flow (not as a separate page jump), with a step indicator showing progress.",
+        "On subsequent logins, the user lands directly on the home feed without any setup interruption.",
+        "The entire flow uses the existing VibeStream dark theme: #121212 background, #8A2BE2 primary, #00FFFF accent, glassmorphism card styling.",
+        "The 'Sign In' button has a loading/spinning state while Internet Identity is processing.",
+        "Mobile-first layout — the onboarding screens are fully usable on a 375px wide viewport.",
+        "No changes are made to useInternetIdentity.ts, useActor.ts, or main.tsx."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx.",
+    "Do not introduce any authentication method other than Internet Identity.",
+    "Do not change the backend Motoko actor or any backend data models.",
+    "Reuse existing UI components from frontend/src/components/ui where applicable."
+  ],
+  "nonGoals": [
+    "Adding username/password authentication — not supported on this platform.",
+    "Adding social login (Google, GitHub, etc.).",
+    "Changing the underlying Internet Identity auth logic or hook behavior.",
+    "Backend schema changes."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

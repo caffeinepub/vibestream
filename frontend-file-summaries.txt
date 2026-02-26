@@ -1,0 +1,10 @@
+{
+  "frontend/src/components/ExploreView.tsx": "Explore/Trending page with debounced search and trending grid. Fixed the `useDebounce` hook to use `useRef<ReturnType<typeof setTimeout> | null>` with a proper `useEffect` instead of the invalid inline cast that caused the TypeScript error.",
+  "frontend/src/components/CommentsPanel.tsx": "Bottom-sheet comments panel for a post with comment list, add/delete functionality, and author avatars. Fixed all `flex-shrink-0` occurrences to the Tailwind v3 equivalent `shrink-0`.",
+  "frontend/src/components/ProfileView.tsx": "User profile page showing avatar, stats, follow/unfollow, edit profile, and post grid. Fixed `flex-shrink-0` to `shrink-0` and removed the unused `Users` import to keep the file clean.",
+  "frontend/src/components/BottomNav.tsx": "Fixed bottom navigation bar with four tabs (Home, Explore, Upload, Profile) using proper `LucideProps` type for icon components so `color` prop is accepted without TypeScript errors.",
+  "frontend/src/components/EditProfileModal.tsx": "New modal component for editing user profile (username, bio, profile picture) with upload progress tracking, validation, and save/cancel actions. This file was missing from the initial build output (truncated) and is now fully implemented.",
+  "frontend/src/pages/LoginScreen.tsx": "Redesigned login screen with animated VibeStream branding, auto-rotating feature carousel (videos, trending, likes, follows), stats row, and a prominent \"Get Started\" CTA button with loading state tied to Internet Identity's loginStatus.",
+  "frontend/src/components/ProfileSetupModal.tsx": "Multi-step full-screen onboarding wizard (Step 1: username, Step 2: bio, Step 3: avatar) with step indicator, inline validation, skip options, upload progress tracking, and smooth fade-in animations — rendered as a full-screen view rather than a floating modal overlay.",
+  "frontend/src/App.tsx": "Main app component that orchestrates the auth flow: splash → login screen → profile setup (full-screen inline wizard) → main feed, with clean conditional rendering and no modal overlay flash."
+}

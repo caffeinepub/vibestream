@@ -1,0 +1,38 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Revamp Login/Signup UI to feel built-in and native",
+  "requirements": [
+    {
+      "id": "REQ-15",
+      "summary": "Redesign LoginScreen with seamless in-app Internet Identity authentication flow, animated branding, feature carousel, inline profile setup wizard, and loading states using existing auth hooks",
+      "acceptanceCriteria": [
+        "The login screen displays VibeStream branding and a clear 'Sign In / Get Started' button that initiates Internet Identity without navigating away from the app.",
+        "The Internet Identity prompt feels embedded — the transition to the II dialog and back is smooth with loading indicators.",
+        "On first login, the profile setup steps appear inline within the same screen/modal flow (not as a separate page jump), with a step indicator showing progress.",
+        "On subsequent logins, the user lands directly on the home feed without any setup interruption.",
+        "The entire flow uses the existing VibeStream dark theme: #121212 background, #8A2BE2 primary, #00FFFF accent, glassmorphism card styling.",
+        "The 'Sign In' button has a loading/spinning state while Internet Identity is processing.",
+        "Mobile-first layout — the onboarding screens are fully usable on a 375px wide viewport.",
+        "No changes are made to useInternetIdentity.ts, useActor.ts, or main.tsx."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/LoginScreen.tsx",
+          "operation": "modify",
+          "description": "Transform LoginScreen into a native-feeling onboarding experience with animated VibeStream branding (using frontend/public/assets/generated/vibestream-logo.dim_512x512.png), a feature carousel highlighting VibeStream capabilities (video sharing, trending content, social features), and a prominent glassmorphism 'Get Started' button that triggers the existing login() function from useInternetIdentity. Add loading/spinner states tied to loginStatus === 'logging-in'. Use smooth transitions, the existing dark theme (#121212, #8A2BE2, #00FFFF), and ensure mobile-first layout (375px viewport). Remove any external redirect feel by using inline loading indicators and animations during the Internet Identity flow."
+        },
+        {
+          "path": "frontend/src/components/ProfileSetupModal.tsx",
+          "operation": "modify",
+          "description": "Redesign ProfileSetupModal as a multi-step inline wizard with a step indicator (Step 1: username, Step 2: bio, Step 3: optional avatar). Use glassmorphism card styling consistent with VibeStream dark theme. Ensure smooth transitions between steps with 'Next' and 'Back' navigation. Keep the existing registerUser mutation logic and image upload progress tracking. Make the modal feel like a native onboarding continuation rather than a separate form. Ensure mobile-first layout (375px viewport). Do not change the underlying hook or backend interaction logic."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Update the routing and conditional rendering logic to ensure the ProfileSetupModal appears inline within the LoginScreen context (not as a separate page) when isAuthenticated && userProfile === null. Add smooth transitions between login, profile setup, and main feed. Ensure that on subsequent logins (when userProfile exists), the user is immediately routed to MainLayout without showing the setup modal. Preserve existing useInternetIdentity and useActor hook usage. Do not modify authentication logic. Use the existing isFetched check from useGetCallerUserProfile to prevent profile setup modal flash."
+        }
+      ]
+    }
+  ]
+}

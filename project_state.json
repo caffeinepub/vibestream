@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "VibeStream — a mobile-first PWA social media app combining Instagram Reels + YouTube Shorts aesthetics. Dark mode with neon purple (#8A2BE2), deep black (#121212), and cyan blue (#00FFFF) theme. Glassmorphism cards, smooth animations, Gen-Z design. React + TypeScript frontend, Motoko backend on Internet Computer, Internet Identity authentication.",
+  "architectural_notes": [
+    "React + TypeScript frontend with Motoko backend on Internet Computer",
+    "Internet Identity for authentication (no Google Sign-In or Firebase)",
+    "Dark mode default: Primary #8A2BE2, Background #121212, Accent #00FFFF",
+    "Glassmorphism cards, rounded UI, smooth animations, Gen-Z aesthetic",
+    "Mobile-first PWA optimized for mobile browsers"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-login-logout-flow-on-the-frontend-using-the-existing-useinternetidentity-hook-on-first-login-redirect-users-to-a-profile-setup-screen-where-they-enter-username-bio-and-optionally-a-profile-picture-url-on-subsequent-logins-skip-setup-if-profile-already-exists-show-a-logout-option-in-the-nav-profile-menu",
+      "title": "Implement Internet Identity login/logout flow on the frontend using the existing useInternetIdentity hook. On first login, redirect users to a profile setup screen where they enter username, bio, and optionally a profile picture URL. On subsequent logins, skip setup if profile already exists. Show a logout option in the nav/profile menu.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-vertical-full-screen-video-feed-as-the-app-s-home-screen-posts-fill-the-full-viewport-height-on-scroll-or-swipe-up-down-on-mobile-the-feed-snaps-to-the-next-previous-post-videos-auto-play-when-visible-and-pause-when-scrolled-away-double-tap-on-a-video-or-photo-to-like-it-show-a-heart-animation-display-post-metadata-overlay-username-caption-like-count-comment-count-at-the-bottom-of-each-post-card-with-glassmorphism-styling",
+      "title": "Build the vertical full-screen video feed as the app's home screen. Posts fill the full viewport height. On scroll (or swipe up/down on mobile), the feed snaps to the next/previous post. Videos auto-play when visible and pause when scrolled away. Double-tap on a video or photo to like it (show a heart animation). Display post metadata overlay (username, caption, like count, comment count) at the bottom of each post card with glassmorphism styling.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-video-and-photo-upload-flow-users-can-select-a-video-file-max-3-minutes-duration-enforced-client-side-or-photo-from-their-device-add-a-caption-preview-the-selected-media-and-submit-store-media-as-base64-or-blob-url-in-the-backend-post-record-show-upload-progress-and-success-error-feedback",
+      "title": "Build a video and photo upload flow. Users can select a video file (max 3 minutes duration enforced client-side) or photo from their device, add a caption, preview the selected media, and submit. Store media as base64 or blob URL in the backend post record. Show upload progress and success/error feedback.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-comments-panel-for-each-post-tapping-the-comments-icon-opens-a-bottom-sheet-or-modal-that-shows-all-comments-with-author-username-avatar-text-timestamp-and-a-text-input-to-add-a-new-comment-users-can-delete-their-own-comments-comment-count-updates-in-real-time-in-the-ui-after-posting-or-deleting",
+      "title": "Build a comments panel for each post. Tapping the comments icon opens a bottom sheet or modal that shows all comments (with author username, avatar, text, timestamp) and a text input to add a new comment. Users can delete their own comments. Comment count updates in real time in the UI after posting or deleting.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-user-profile-page-display-profile-picture-or-default-avatar-username-bio-followers-count-following-count-total-likes-count-and-a-grid-of-the-user-s-uploaded-posts-thumbnails-include-a-follow-unfollow-button-when-viewing-another-user-s-profile-include-an-edit-profile-option-on-the-logged-in-user-s-own-profile-tapping-a-grid-post-opens-it-in-the-full-screen-feed-view",
+      "title": "Build the user profile page. Display: profile picture (or default avatar), username, bio, followers count, following count, total likes count, and a grid of the user's uploaded posts (thumbnails). Include a Follow/Unfollow button when viewing another user's profile. Include an Edit Profile option on the logged-in user's own profile. Tapping a grid post opens it in the full-screen feed view.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-an-explore-trending-page-that-displays-trending-posts-ranked-by-likes-in-a-scrollable-grid-include-a-search-bar-at-the-top-that-searches-both-users-and-posts-show-search-results-in-separate-tabs-users-posts-tapping-a-user-result-navigates-to-their-profile-tapping-a-post-result-opens-it-in-the-full-screen-feed",
+      "title": "Build an Explore / Trending page that displays trending posts (ranked by likes) in a scrollable grid. Include a search bar at the top that searches both users and posts. Show search results in separate tabs (Users / Posts). Tapping a user result navigates to their profile; tapping a post result opens it in the full-screen feed.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-app-wide-design-system-dark-mode-only-with-deep-black-121212-background-neon-purple-8a2be2-primary-cyan-blue-00ffff-accent-glassmorphism-card-style-semi-transparent-backgrounds-with-backdrop-blur-and-subtle-borders-smooth-css-transitions-and-micro-animations-like-button-pulse-heart-burst-page-transitions-rounded-corners-on-all-interactive-elements-mobile-first-responsive-layout-with-a-fixed-bottom-navigation-bar-home-explore-upload-profile",
+      "title": "Implement the app-wide design system: dark mode only with Deep Black (#121212) background, Neon Purple (#8A2BE2) primary, Cyan Blue (#00FFFF) accent. Glassmorphism card style (semi-transparent backgrounds with backdrop-blur and subtle borders). Smooth CSS transitions and micro-animations (like button pulse, heart burst, page transitions). Rounded corners on all interactive elements. Mobile-first responsive layout with a fixed bottom navigation bar (Home, Explore, Upload, Profile).",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-configure-the-app-as-an-installable-pwa-add-a-web-manifest-manifest-json-with-app-name-vibestream-theme-color-8a2be2-background-color-121212-display-mode-standalone-and-appropriate-icons-register-a-service-worker-for-basic-caching-of-app-shell-assets-add-the-required-html-meta-tags-for-mobile-pwa-apple-mobile-web-app-capable-viewport-theme-color",
+      "title": "Configure the app as an installable PWA: add a web manifest (manifest.json) with app name VibeStream, theme color #8A2BE2, background color #121212, display mode standalone, and appropriate icons. Register a service worker for basic caching of app shell assets. Add the required HTML meta tags for mobile PWA (apple-mobile-web-app-capable, viewport, theme-color).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-redesign-the-loginscreen-frontend-src-pages-loginscreen-tsx-to-make-internet-identity-authentication-feel-natively-built-in-rather-than-redirecting-to-an-external-page-the-login-signup-experience-should-be-presented-as-a-seamless-in-app-onboarding-flow-show-animated-vibestream-branding-a-brief-feature-carousel-or-highlights-and-a-prominent-get-started-sign-in-call-to-action-button-that-triggers-internet-identity-inline-after-authentication-if-the-user-has-no-profile-transition-directly-into-the-profilesetupmodal-inline-no-page-redirect-with-a-multi-step-wizard-feel-step-1-username-step-2-bio-step-3-optional-avatar-use-the-existing-useinternetidentity-hook-and-app-tsx-routing-logic-do-not-change-auth-logic-only-the-visual-presentation-and-flow-polish",
+      "title": "Redesign the LoginScreen (frontend/src/pages/LoginScreen.tsx) to make Internet Identity authentication feel natively built-in rather than redirecting to an external page. The login/signup experience should be presented as a seamless, in-app onboarding flow: show animated VibeStream branding, a brief feature carousel or highlights, and a prominent 'Get Started' / 'Sign In' call-to-action button that triggers Internet Identity inline. After authentication, if the user has no profile, transition directly into the ProfileSetupModal inline (no page redirect) with a multi-step wizard feel (Step 1: username, Step 2: bio, Step 3: optional avatar). Use the existing useInternetIdentity hook and App.tsx routing logic — do not change auth logic, only the visual presentation and flow polish.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Internet Identity authentication with user profile setup (username, bio, profile picture)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Vertical full-screen auto-play video feed with swipe up/down navigation and double-tap to like",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Video and photo upload (videos max 3 minutes)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Like and comment system",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Follow / Unfollow users",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "User profile page with photo, followers/following count, total likes, and grid of uploaded posts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Explore / Trending page and search for users and posts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "PWA installable app with mobile-responsive layout",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Set up the Motoko backend actor with all core data models and storage: User (principal, username, bio, profilePicture, followersCount, followingCount, totalLikes, createdAt), Post (id, authorPrincipal, mediaUrl, mediaType (video|photo), caption, likesCount, commentsCount, createdAt), Comment (id, postId, authorPrincipal, text, createdAt), and relationship maps for follows and likes.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Implement Internet Identity authentication endpoints: register a new user profile with username, bio, and profile picture URL; update own profile; get profile by principal; get own profile. Usernames must be unique.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Implement post management endpoints: createPost (mediaUrl, mediaType, caption), deletePost (only by owner), getPost by id, getFeed (paginated list of posts ordered by recency), getPostsByUser (paginated), getTrendingPosts (posts ordered by likesCount descending).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Implement like and comment endpoints: likePost, unlikePost, isLiked (returns bool for calling principal), addComment (postId, text), deleteComment (only by author or post owner), getComments (paginated by postId). Update likesCount and commentsCount on the parent post and totalLikes on the author's profile.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Implement follow/unfollow endpoints: followUser, unfollowUser, isFollowing (returns bool), getFollowers (paginated), getFollowing (paginated). Update followersCount and followingCount on the relevant user profiles.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Implement search endpoints: searchUsers (query string matching username, returns paginated list of user profiles), searchPosts (query string matching caption, returns paginated list of posts).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Revamp the login/signup UI to make Internet Identity authentication feel more native and built-in, with a polished onboarding flow integrated directly into the app",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "VibeStream",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

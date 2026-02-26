@@ -1,0 +1,27 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-redesign-the-loginscreen-frontend-src-pages-loginscreen-tsx-to-make-internet-identity-authentication-feel-natively-built-in-rather-than-redirecting-to-an-external-page-the-login-signup-experience-should-be-presented-as-a-seamless-in-app-onboarding-flow-show-animated-vibestream-branding-a-brief-feature-carousel-or-highlights-and-a-prominent-get-started-sign-in-call-to-action-button-that-triggers-internet-identity-inline-after-authentication-if-the-user-has-no-profile-transition-directly-into-the-profilesetupmodal-inline-no-page-redirect-with-a-multi-step-wizard-feel-step-1-username-step-2-bio-step-3-optional-avatar-use-the-existing-useinternetidentity-hook-and-app-tsx-routing-logic-do-not-change-auth-logic-only-the-visual-presentation-and-flow-polish",
+      "featureTitle": "Redesign the LoginScreen (frontend/src/pages/LoginScreen.tsx) to make Internet Identity authentication feel natively built-in rather than redirecting to an external page. The login/signup experience should be presented as a seamless, in-app onboarding flow: show animated VibeStream branding, a brief feature carousel or highlights, and a prominent 'Get Started' / 'Sign In' call-to-action button that triggers Internet Identity inline. After authentication, if the user has no profile, transition directly into the ProfileSetupModal inline (no page redirect) with a multi-step wizard feel (Step 1: username, Step 2: bio, Step 3: optional avatar). Use the existing useInternetIdentity hook and App.tsx routing logic — do not change auth logic, only the visual presentation and flow polish.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ProfileSetupModal.tsx",
+        "frontend/src/pages/LoginScreen.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
