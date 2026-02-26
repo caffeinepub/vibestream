@@ -1,12 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the infinite "Loading your profile" screen that appears after a user authenticates via Internet Identity in the VibeStream app.
+**Goal:** Remove the loading screen entirely from App.tsx so users are never shown a spinner or splash state during the auth/profile flow.
 
 **Planned changes:**
-- Update `App.tsx` to exhaustively handle all profile loading states (loading, success, error) so the app never gets stuck in an infinite spinner
-- Ensure that if the user has an existing profile, they are navigated to the main feed; if no profile exists, the `ProfileSetupModal` is shown; if an error occurs, a fallback/retry option is displayed
-- Audit `useQueries.ts` (or equivalent profile fetch hooks) to set `enabled: false` when the authenticated actor is null or anonymous, preventing premature/empty queries
-- Automatically re-enable and refetch the profile query once the authenticated actor becomes available
+- Remove all loading spinner and splash screen UI from App.tsx
+- Unauthenticated users are routed directly to LoginScreen with no intermediate loading state
+- Authenticated users with an existing profile go directly to the main layout
+- Authenticated users without a profile go directly to the ProfileSetupModal
+- No spinner, skeleton, or loading text is rendered at any point in the auth/profile flow in App.tsx
 
-**User-visible outcome:** After logging in with Internet Identity, users no longer see an infinite "Loading your profile" spinner — they are either taken to the main app, shown the profile setup flow, or presented with an error/retry option.
+**User-visible outcome:** The app instantly shows either the LoginScreen, main layout, or ProfileSetupModal on load — no loading screen or spinner is ever displayed.

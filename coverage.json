@@ -1,35 +1,24 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-26T02:56:20.235Z",
+  "generatedAt": "2026-02-26T03:21:55.626Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-16",
-        "summary": "Fix the infinite 'Loading your profile' screen in App.tsx that occurs after a user authenticates via Internet Identity. The profile loading state must resolve correctly in all cases: (1) when the user has an existing profile — proceed to the main app, (2) when the user has no profile — show the ProfileSetupModal, (3) when the backend query errors or returns null/empty — do not remain stuck; show an appropriate fallback or retry option. Ensure the React Query profile fetch (getMyProfile or equivalent) uses the authenticated actor, handles loading/error/success states exhaustively, and does not stall indefinitely due to a missing actor, unauthenticated call, or unhandled promise rejection.",
+        "id": "REQ-19",
+        "summary": "Remove the loading spinner / loading screen from App.tsx entirely. The app must never show any loading or splash state — unauthenticated users see the LoginScreen immediately, and authenticated users with a known profile go directly to the main layout. If a profile fetch is still in-flight after authentication, skip the loading screen and instead render the main layout or the ProfileSetupModal as soon as the state resolves, without any intermediate loading indicator.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/App.tsx"
         ],
         "matchedFiles": [
           "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-17",
-        "summary": "Audit the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing. If the actor is not yet initialized (e.g., still null or anonymous), the query should be disabled (enabled: false) rather than executing and returning an empty/error result that causes the loading state to hang. Re-enable and refetch automatically once the authenticated actor is ready.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useQueries.ts"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useQueries.ts"
         ]
       }
     ]
@@ -40,7 +29,6 @@
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/App.tsx",
-    "frontend/src/hooks/useQueries.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

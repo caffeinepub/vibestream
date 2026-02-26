@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
+  "projectStateVersion": 11,
   "summary": "VibeStream — a mobile-first PWA social media app combining Instagram Reels + YouTube Shorts aesthetics. Dark mode with neon purple (#8A2BE2), deep black (#121212), and cyan blue (#00FFFF) theme. Glassmorphism cards, smooth animations, Gen-Z design. React + TypeScript frontend, Motoko backend on Internet Computer, Internet Identity authentication.",
   "architectural_notes": [
     "React + TypeScript frontend with Motoko backend on Internet Computer",
@@ -99,6 +99,22 @@
       "title": "Audit the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing. If the actor is not yet initialized (e.g., still null or anonymous), the query should be disabled (enabled: false) rather than executing and returning an empty/error result that causes the loading state to hang. Re-enable and refetch automatically once the authenticated actor is ready.",
       "reqIds": [
         "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-app-tsx-so-that-the-splash-loading-screen-is-never-shown-as-the-first-screen-on-app-load-the-initial-screen-presented-to-unauthenticated-users-must-always-be-the-loginscreen-the-splash-or-loading-indicator-should-only-appear-after-a-user-has-authenticated-and-the-app-is-actively-fetching-their-profile-never-before-authentication-has-been-attempted",
+      "title": "Fix App.tsx so that the splash/loading screen is never shown as the first screen on app load. The initial screen presented to unauthenticated users must always be the LoginScreen. The splash or loading indicator should only appear after a user has authenticated and the app is actively fetching their profile — never before authentication has been attempted.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-the-loading-spinner-loading-screen-from-app-tsx-entirely-the-app-must-never-show-any-loading-or-splash-state-unauthenticated-users-see-the-loginscreen-immediately-and-authenticated-users-with-a-known-profile-go-directly-to-the-main-layout-if-a-profile-fetch-is-still-in-flight-after-authentication-skip-the-loading-screen-and-instead-render-the-main-layout-or-the-profilesetupmodal-as-soon-as-the-state-resolves-without-any-intermediate-loading-indicator",
+      "title": "Remove the loading spinner / loading screen from App.tsx entirely. The app must never show any loading or splash state — unauthenticated users see the LoginScreen immediately, and authenticated users with a known profile go directly to the main layout. If a profile fetch is still in-flight after authentication, skip the loading screen and instead render the main layout or the ProfileSetupModal as soon as the state resolves, without any intermediate loading indicator.",
+      "reqIds": [
+        "REQ-19"
       ],
       "version": 1
     }

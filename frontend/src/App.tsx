@@ -2,18 +2,15 @@ import { useState } from 'react';
 import { useInternetIdentity } from './hooks/useInternetIdentity';
 import { useQueryClient } from '@tanstack/react-query';
 import { useGetCallerUserProfile } from './hooks/useQueries';
-import { useActor } from './hooks/useActor';
 import LoginScreen from './pages/LoginScreen';
 import ProfileSetupModal from './components/ProfileSetupModal';
 import MainLayout from './components/MainLayout';
 import { Toaster } from '@/components/ui/sonner';
-import { RefreshCw } from 'lucide-react';
 
 type ActiveTab = 'feed' | 'explore' | 'upload' | 'profile';
 
 export default function App() {
-  const { identity, isInitializing } = useInternetIdentity();
-  const { isFetching: actorFetching } = useActor();
+  const { identity } = useInternetIdentity();
   const queryClient = useQueryClient();
   const isAuthenticated = !!identity;
 
@@ -46,33 +43,7 @@ export default function App() {
     setActiveTab('feed');
   };
 
-  // 1. Initializing Internet Identity — show splash
-  if (isInitializing) {
-    return (
-      <div className="flex items-center justify-center h-dvh bg-vibe-black">
-        <div className="flex flex-col items-center gap-5">
-          <div className="relative">
-            <div
-              className="absolute inset-0 rounded-3xl blur-xl opacity-60 animate-pulse"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #00FFFF)' }}
-            />
-            <img
-              src="/assets/generated/vibestream-logo.dim_512x512.png"
-              alt="VibeStream"
-              className="relative w-20 h-20 rounded-3xl"
-            />
-          </div>
-          <div className="flex gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-vibe-purple animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-2 h-2 rounded-full bg-vibe-purple animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-2 h-2 rounded-full bg-vibe-purple animate-bounce" style={{ animationDelay: '300ms' }} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // 2. Not authenticated — show login screen
+  // 1. Not authenticated — show login screen immediately
   if (!isAuthenticated) {
     return (
       <>
@@ -82,64 +53,7 @@ export default function App() {
     );
   }
 
-  // 3. Authenticated — actor is initializing or profile is loading (and we don't have data yet)
-  if ((actorFetching || profileLoading) && !isFetched) {
-    return (
-      <div className="flex items-center justify-center h-dvh bg-vibe-black">
-        <div className="flex flex-col items-center gap-4">
-          <div className="relative">
-            <div
-              className="absolute inset-0 rounded-3xl blur-xl opacity-40"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #00FFFF)' }}
-            />
-            <img
-              src="/assets/generated/vibestream-logo.dim_512x512.png"
-              alt="VibeStream"
-              className="relative w-16 h-16 rounded-3xl"
-            />
-          </div>
-          <p className="text-muted-foreground text-sm">Loading your profile...</p>
-          <div className="flex gap-1.5 mt-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-vibe-purple animate-bounce" style={{ animationDelay: '0ms' }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-vibe-purple animate-bounce" style={{ animationDelay: '150ms' }} />
-            <span className="w-1.5 h-1.5 rounded-full bg-vibe-purple animate-bounce" style={{ animationDelay: '300ms' }} />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // 4. Profile query failed — show error with retry
-  if (profileError && !isFetched) {
-    return (
-      <div className="flex items-center justify-center h-dvh bg-vibe-black">
-        <div className="flex flex-col items-center gap-4 px-6 text-center">
-          <div className="relative">
-            <div
-              className="absolute inset-0 rounded-3xl blur-xl opacity-40"
-              style={{ background: 'linear-gradient(135deg, #8A2BE2, #00FFFF)' }}
-            />
-            <img
-              src="/assets/generated/vibestream-logo.dim_512x512.png"
-              alt="VibeStream"
-              className="relative w-16 h-16 rounded-3xl"
-            />
-          </div>
-          <p className="text-foreground font-medium">Couldn't load your profile</p>
-          <p className="text-muted-foreground text-sm">There was a problem connecting to the network. Please try again.</p>
-          <button
-            onClick={() => refetchProfile()}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-vibe-purple text-white text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            <RefreshCw className="w-4 h-4" />
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // 5. Authenticated but no profile — show inline profile setup (full screen)
+  // 2. Authenticated but no profile — show inline profile setup (full screen)
   if (showProfileSetup) {
     return (
       <>
@@ -149,7 +63,12 @@ export default function App() {
     );
   }
 
-  // 6. Fully authenticated with profile — show main app
+  // 3. Profile query failed — retry silently, show main layout if we have data
+  if (profileError && !isFetched) {
+    refetchProfile();
+  }
+
+  // 4. Fully authenticated with profile — show main app
   return (
     <>
       <MainLayout

@@ -1,59 +1,37 @@
 {
   "kind": "build_request",
-  "title": "Fix 'Loading your profile' infinite loading state after login",
-  "projectName": "VibeStream",
-  "priority": "high",
+  "title": "Remove loading screen entirely",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-16",
-      "text": "Fix the infinite 'Loading your profile' screen in App.tsx that occurs after a user authenticates via Internet Identity. The profile loading state must resolve correctly in all cases: (1) when the user has an existing profile — proceed to the main app, (2) when the user has no profile — show the ProfileSetupModal, (3) when the backend query errors or returns null/empty — do not remain stuck; show an appropriate fallback or retry option. Ensure the React Query profile fetch (getMyProfile or equivalent) uses the authenticated actor, handles loading/error/success states exhaustively, and does not stall indefinitely due to a missing actor, unauthenticated call, or unhandled promise rejection.",
+      "id": "REQ-19",
+      "text": "Remove the loading spinner / loading screen from App.tsx entirely. The app must never show any loading or splash state — unauthenticated users see the LoginScreen immediately, and authenticated users with a known profile go directly to the main layout. If a profile fetch is still in-flight after authentication, skip the loading screen and instead render the main layout or the ProfileSetupModal as soon as the state resolves, without any intermediate loading indicator.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-4"
         ],
         "quotes": [
-          "It is only showing \"loading your profile\""
+          "Remove loading screen"
         ]
       },
       "acceptanceCriteria": [
-        "After successful Internet Identity login, the 'Loading your profile' spinner resolves within a reasonable time (no infinite spinner).",
-        "If the authenticated user has an existing profile, they are taken directly to the main feed/home screen.",
-        "If the authenticated user has no profile, the ProfileSetupModal (or inline profile setup wizard) is displayed.",
-        "If the profile query fails (network error, actor not ready, backend error), an error state or retry button is shown instead of an infinite loader.",
-        "The profile fetch uses an authenticated actor (not anonymous), so the backend can identify the calling principal.",
-        "No console errors related to unhandled promise rejections or null actor references during the auth → profile load flow."
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "text": "Audit the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing. If the actor is not yet initialized (e.g., still null or anonymous), the query should be disabled (enabled: false) rather than executing and returning an empty/error result that causes the loading state to hang. Re-enable and refetch automatically once the authenticated actor is ready.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "It is only showing \"loading your profile\""
-        ]
-      },
-      "acceptanceCriteria": [
-        "The getMyProfile (or equivalent) React Query hook sets enabled: false when the actor is null or anonymous.",
-        "Once the authenticated actor becomes available, the profile query fires automatically via query invalidation or dependency change.",
-        "No profile query is fired with an anonymous principal that would return an empty result and leave the UI stuck."
+        "On app load, no loading spinner or splash screen is ever displayed.",
+        "Unauthenticated users land directly on the LoginScreen with zero delay.",
+        "Authenticated users with an existing profile go directly to the main layout without seeing a loading screen.",
+        "Authenticated users without a profile go directly to the ProfileSetupModal without seeing a loading screen.",
+        "No spinner, skeleton, or loading text is rendered in App.tsx at any point in the auth/profile flow."
       ]
     }
   ],
   "constraints": [
-    "Do not modify frontend/src/hooks/useInternetIdentity.ts or frontend/src/hooks/useActor.ts — these are read-only.",
-    "Do not modify frontend/src/main.tsx.",
-    "Do not alter the existing authentication logic — only fix the loading state handling in the profile fetch flow.",
-    "Do not change backend data models or API signatures."
+    "Do not modify files under frontend/src/hooks/ (useInternetIdentity.ts, useActor.ts) or frontend/src/main.tsx.",
+    "Do not alter the authentication logic — only remove the loading screen UI."
   ],
   "nonGoals": [
-    "Redesigning the login screen or onboarding flow.",
-    "Adding new profile fields or changing profile setup steps.",
-    "Changing backend Motoko actor logic."
+    "Adding any new loading or skeleton states elsewhere in the app.",
+    "Changing the LoginScreen design or onboarding flow.",
+    "Modifying backend logic."
   ],
   "imageRequirements": {
     "required": [],

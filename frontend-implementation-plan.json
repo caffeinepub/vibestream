@@ -1,40 +1,23 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix 'Loading your profile' infinite loading state after login",
+  "title": "Remove loading screen entirely",
   "requirements": [
     {
-      "id": "REQ-16",
-      "summary": "Fix the infinite 'Loading your profile' screen in App.tsx that occurs after a user authenticates via Internet Identity by ensuring the profile loading state resolves correctly in all cases: existing profile, no profile, or error",
+      "id": "REQ-19",
+      "summary": "Remove the loading spinner and loading screen from App.tsx. Unauthenticated users see LoginScreen immediately; authenticated users go directly to the main layout or ProfileSetupModal without any intermediate loading state.",
       "acceptanceCriteria": [
-        "After successful Internet Identity login, the 'Loading your profile' spinner resolves within a reasonable time (no infinite spinner).",
-        "If the authenticated user has an existing profile, they are taken directly to the main feed/home screen.",
-        "If the authenticated user has no profile, the ProfileSetupModal (or inline profile setup wizard) is displayed.",
-        "If the profile query fails (network error, actor not ready, backend error), an error state or retry button is shown instead of an infinite loader.",
-        "The profile fetch uses an authenticated actor (not anonymous), so the backend can identify the calling principal.",
-        "No console errors related to unhandled promise rejections or null actor references during the auth → profile load flow."
+        "On app load, no loading spinner or splash screen is ever displayed.",
+        "Unauthenticated users land directly on the LoginScreen with zero delay.",
+        "Authenticated users with an existing profile go directly to the main layout without seeing a loading screen.",
+        "Authenticated users without a profile go directly to the ProfileSetupModal without seeing a loading screen.",
+        "No spinner, skeleton, or loading text is rendered in App.tsx at any point in the auth/profile flow."
       ],
       "file_operations": [
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Refactor the profile loading logic in App.tsx to properly handle all three states: (1) user has existing profile → show main app, (2) user has no profile → show ProfileSetupModal/wizard, (3) profile query fails or errors → show error state with retry option. Ensure the loading spinner resolves by checking both actorFetching and profileQuery states. Add error boundary handling for failed profile fetches. Remove any conditions that could cause an infinite loading loop when the actor is ready but the profile query returns null or encounters an error. Add a timeout fallback or explicit error display if the profile query stalls. Verify the component follows the authorization component's recommended pattern for preventing profile setup modal flash by properly combining actorFetching, query.isLoading, and query.isFetched states."
-        }
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "summary": "Audit and fix the useQueries.ts hooks that fetch the current user's profile to ensure they depend on an authenticated actor being available before firing, and re-enable automatically once the authenticated actor is ready",
-      "acceptanceCriteria": [
-        "The getMyProfile (or equivalent) React Query hook sets enabled: false when the actor is null or anonymous.",
-        "Once the authenticated actor becomes available, the profile query fires automatically via query invalidation or dependency change.",
-        "No profile query is fired with an anonymous principal that would return an empty result and leave the UI stuck."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useQueries.ts",
-          "operation": "modify",
-          "description": "Audit and update the useGetCallerUserProfile hook (or equivalent profile fetch hook) to follow the authorization component's recommended pattern. Set enabled: false when the actor is null, undefined, or when actorFetching is true. Add actorFetching to the dependencies so the query only fires after the authenticated actor is fully initialized. Return a custom state object that properly reflects actor dependency by combining actorFetching || query.isLoading for the isLoading field, and checking !!actor && query.isFetched for isFetched. Ensure the queryKey includes actor identity or principal so the query automatically refetches when the authenticated actor changes. Set retry: false to prevent indefinite retries that could mask the underlying issue. Verify the component follows this exact pattern from the authorization component usage instructions to prevent profile setup modal flash and infinite loading states."
+          "description": "Remove all loading screen UI from App.tsx. Eliminate the loading spinner that appears after authentication while fetching the profile. Render LoginScreen immediately for unauthenticated users. For authenticated users, render the main layout or ProfileSetupModal as soon as the profile state resolves, with no intermediate loading indicator. Ensure the component logic skips any loading screen rendering and transitions directly from authentication check to the appropriate view (LoginScreen, MainLayout, or ProfileSetupModal)."
         }
       ]
     }
